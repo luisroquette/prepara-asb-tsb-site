@@ -19,7 +19,7 @@ export default function Hero() {
       if (event.data?.type === "prepara-aurora-ready") {
         setReady(true);
       } else if (event.data?.type === "prepara-aurora-step" && event.data.direction === 1) {
-        section.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
+        section.current?.nextElementSibling?.scrollIntoView({ behavior: "instant" });
       } else if (event.data?.type === "prepara-aurora-cta" && (event.data.target === "curso" || event.data.target === "resultados")) {
         document.getElementById(event.data.target)?.scrollIntoView({ behavior: "smooth" });
       }
