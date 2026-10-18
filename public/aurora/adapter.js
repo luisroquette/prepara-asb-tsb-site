@@ -1,5 +1,4 @@
 const presets = ["Stream", "Cascade", "Veil", "Ember"];
-let playing = false;
 let lastWheel = -Infinity;
 let ready = false;
 
@@ -16,6 +15,17 @@ function announceReady() {
     ready = true;
     observer.disconnect();
     window.parent.postMessage({ type: "prepara-aurora-ready" }, window.location.origin);
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      let next = 1;
+      setInterval(() => {
+        const preset = presets[next];
+        const button = Array.from(document.querySelectorAll('button[aria-pressed]')).find(
+          (item) => item.textContent.trim() === preset,
+        );
+        if (button && button.getAttribute("aria-pressed") !== "true") button.click();
+        next = (next + 1) % presets.length;
+      }, 2500);
+    }
   }
 }
 const observer = new MutationObserver(announceReady);
@@ -64,20 +74,7 @@ window.addEventListener("message", (event) => {
   if (event.origin !== window.location.origin || event.source !== window.parent) return;
   if (event.data?.type === "prepara-aurora-ping") {
     if (ready) window.parent.postMessage({ type: "prepara-aurora-ready" }, window.location.origin);
-    return;
   }
-  if (event.data?.type !== "prepara-aurora-play" || playing || !ready) return;
-  playing = true;
-  document.documentElement.style.setProperty("--aurora-reveal", "1");
-  presets.slice(1).forEach((preset, index) => {
-    setTimeout(() => {
-      const button = Array.from(document.querySelectorAll('button[aria-pressed]')).find(
-        (item) => item.textContent.trim() === preset,
-      );
-      if (button && button.getAttribute("aria-pressed") !== "true") button.click();
-    }, (index + 1) * 850);
-  });
-  setTimeout(() => window.parent.postMessage({ type: "prepara-aurora-complete" }, window.location.origin), 3600);
 });
 
 document.addEventListener("click", (event) => {
