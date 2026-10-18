@@ -1,0 +1,28 @@
+/* The four requested presets retain Aurora's original shader and controls. */
+section > .pointer-events-auto.absolute.bottom-6 > button:nth-child(n + 5) {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  section > .pointer-events-none.absolute.inset-0[aria-hidden="false"] > div {
+    width: calc(100% - 24px);
+    margin-inline: 12px;
+    padding: 22px 14px !important;
+    border-radius: 18px;
+    background: linear-gradient(110deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.74));
+    backdrop-filter: blur(14px);
+  }
+
+  section > .pointer-events-none.absolute.inset-0[aria-hidden="false"] h1,
+  section > .pointer-events-none.absolute.inset-0[aria-hidden="false"] p {
+    color: #161424 !important;
+    mix-blend-mode: normal !important;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-canvas {
+    display: none;
+  }
+}

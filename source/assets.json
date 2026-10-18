@@ -1,0 +1,101 @@
+{
+  "source_url": "https://www.preparaasbtsb.com.br/",
+  "captured_at_utc": "2026-10-18T15:14:05.683531+00:00",
+  "html_file": "index.html",
+  "images": [
+    {
+      "original_file": "Criação logo prepara asbtsb.png",
+      "source_url": "https://www.preparaasbtsb.com.br/Cria%C3%A7%C3%A3o%20logo%20prepara%20asbtsb.png",
+      "local_file": "assets/logo-prepara-asb-tsb.png",
+      "alt": "Logo Prepara ASB TSB",
+      "bytes": 106027,
+      "sha256": "15ea3044ecf80ee60f7fe0b0a8ccd47858a5b35fd1ea721176163a55ecfff29e",
+      "width": 2000,
+      "height": 666
+    },
+    {
+      "original_file": "Confie-se.jpg",
+      "source_url": "https://www.preparaasbtsb.com.br/Confie-se.jpg",
+      "local_file": "assets/hero-concurseira-concursada.jpg",
+      "alt": "Da concurseira para concursada",
+      "bytes": 163873,
+      "sha256": "aa40d3fbdce246267838fbcaafe6263126826662742dd4764807e38e2def9b7f",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "original_file": "foto-professor.jpg",
+      "source_url": "https://www.preparaasbtsb.com.br/foto-professor.jpg",
+      "local_file": "assets/professor-diego-thiers.jpg",
+      "alt": "Professor Diego Thiers",
+      "bytes": 95501,
+      "sha256": "16934e2c4612e90a57248be0741d4c8c65e01e02d333cc6166f237aa1fdc2910",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "original_file": "1° lugar EBSERH .jpg",
+      "source_url": "https://www.preparaasbtsb.com.br/1%C2%B0%20lugar%20EBSERH%20.jpg",
+      "local_file": "assets/depoimento-ebserh-primeiro-lugar.jpg",
+      "alt": "Captura de depoimento sobre aprovação em primeiro lugar na EBSERH",
+      "bytes": 84889,
+      "sha256": "ba745ce30d2e43b92265d6e66e044db514e6649a1da18251b6c1d487951914d6",
+      "width": 963,
+      "height": 1600
+    },
+    {
+      "original_file": "aprovada Ebserh 2025 3.jpg",
+      "source_url": "https://www.preparaasbtsb.com.br/aprovada%20Ebserh%202025%203.jpg",
+      "local_file": "assets/depoimento-ebserh-2025.jpg",
+      "alt": "Captura de depoimento de aprovação na EBSERH em 2025",
+      "bytes": 107685,
+      "sha256": "3133262580dd70f20c6c232653a695bd469f51ca7c2c79f21ab539040f204065",
+      "width": 851,
+      "height": 1280
+    },
+    {
+      "original_file": "Foto de Felix (11).jpg",
+      "source_url": "https://www.preparaasbtsb.com.br/Foto%20de%20Felix%20%2811%29.jpg",
+      "local_file": "assets/depoimento-aluno-felix-11.jpg",
+      "alt": "Captura de depoimento de aluno aprovado",
+      "bytes": 66308,
+      "sha256": "44a41b80cede139819e361f3fbcb1e847c1ee3f39d7389fd79aa736c52705405",
+      "width": 1080,
+      "height": 1146
+    },
+    {
+      "original_file": "passou em 1 lugar (2).jpg",
+      "source_url": "https://www.preparaasbtsb.com.br/passou%20em%201%20lugar%20%282%29.jpg",
+      "local_file": "assets/depoimento-primeiro-lugar.jpg",
+      "alt": "Captura de depoimento sobre aprovação em primeiro lugar",
+      "bytes": 66097,
+      "sha256": "2f2d074cd23004c22722f29cc433695ee0dab23bbae1c7731d43d67c459a9544",
+      "width": 661,
+      "height": 490
+    },
+    {
+      "original_file": "Foto de Felix (10).jpg",
+      "source_url": "https://www.preparaasbtsb.com.br/Foto%20de%20Felix%20%2810%29.jpg",
+      "local_file": "assets/depoimento-aluno-felix-10.jpg",
+      "alt": "Captura de depoimento de aprovação em concurso",
+      "bytes": 63915,
+      "sha256": "90533f793135c9f006fea4a5f14df34be6ce2bd8f1d2a7e62a4b7ce48fa2c1cf",
+      "width": 411,
+      "height": 1280
+    }
+  ],
+  "external_dependencies": [
+    {
+      "kind": "tailwind_browser_cdn",
+      "url": "https://cdn.tailwindcss.com"
+    },
+    {
+      "kind": "icons_stylesheet",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    },
+    {
+      "kind": "fonts_stylesheet",
+      "url": "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&family=Inter:wght@300;400;600;700&display=swap"
+    }
+  ]
+}
