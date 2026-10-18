@@ -1,6 +1,6 @@
 # Prepara ASB/TSB — pacote para importar no Lovable
 
-Este repositório contém a landing page, imagens e seis componentes animados. Compare a importação com a [versão publicada](https://prepara-asb-tsb.vercel.app/). **O repositório é privado:** o responsável pela importação precisa de acesso a ele ou receber o ZIP de alguém com acesso.
+Este repositório público contém a landing page, imagens e seis componentes animados. Compare a importação com a [versão publicada](https://prepara-asb-tsb.vercel.app/).
 
 **Estado em 18/10/2026:** landing page publicada e pacote de transferência pronto. A importação no Lovable e a troca do domínio original são etapas separadas.
 
@@ -21,7 +21,7 @@ Objetivo: fazer todas as seções, arquivos locais e interações funcionarem. A
 
 Rotas internas que devem responder HTTP 200 e carregar na página: /, /aurora/, /timeline/, /folders/, /proof/, /3d-proof/ e /closing/. Preserve a barra final nas seis rotas embutidas: /aurora/index.html e equivalentes deram 404 em um deploy anterior. Preserve também os caminhos relativos de JS, CSS, fontes e imagens em cada iframe.
 
-Hero: mantenha o iframe Aurora fixo em uma área própria de rolagem com cinco paradas obrigatórias, inclusive para gestos rápidos de mouse e toque. A primeira revela Stream progressivamente; as próximas apresentam Cascade, Veil e Ember, nessa ordem, antes de liberar a seção seguinte. Não use timer nem controles de escolha visíveis. Os botões Conhecer o curso e Ver resultados devem enviar mensagens para a página principal e rolar até #curso e #resultados. Respeite prefers-reduced-motion, exibindo um hero estático sem trechos extras.
+Hero: o primeiro gesto de rolagem revela Stream e inicia a sequência automática Cascade, Veil e Ember em cerca de 3,6 segundos. O segundo gesto libera a próxima seção; se vier durante a animação, aguarde o fim dela e avance automaticamente. Não mostre controles de escolha. Os botões Conhecer o curso e Ver resultados devem enviar mensagens para a página principal e rolar até #curso e #resultados. Respeite prefers-reduced-motion, exibindo um hero estático sem bloquear a rolagem.
 
 Método: seis passos, animação vinculada ao scroll e conteúdo alternativo acessível. Curso: pastas interativas e Works Wheel com seis frentes do único curso. Resultados: cartões animados e capturas reais com nomes corretos e links para ampliar. Professor: use a foto de Diego Thiers. Preserve FAQ, matrícula, fechamento, redes sociais e encaixe de scroll.
 

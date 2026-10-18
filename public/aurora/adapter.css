@@ -5,6 +5,7 @@
 
 .aurora-canvas {
   opacity: var(--aurora-reveal) !important;
+  transition: opacity .65s ease !important;
 }
 
 section > .pointer-events-auto.absolute.bottom-6 > button:nth-child(n + 5) {
