@@ -31,6 +31,7 @@ h2 em{font-style:normal;color:var(--violet)}
 .hero-scroll span{font-size:17px;vertical-align:middle;margin-left:8px}
 .intro{padding-top:136px;padding-bottom:72px}
 .intro-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.55fr);gap:8%;align-items:end;margin-top:36px}
+@media(prefers-reduced-motion:no-preference){.scroll-effects-ready .intro-grid[data-scroll-reveal]{transition-duration:.5s}}
 .intro h2{max-width:900px;margin-bottom:0}
 .intro-copy{padding-bottom:8px}
 .intro-copy p{font-size:18px;line-height:1.6;color:var(--muted);margin-bottom:30px}

@@ -7,6 +7,13 @@ import test from "node:test";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
+test("Aurora exit reaches the next section within one second", () => {
+  const hero = readFileSync(path.join(root, "app/Hero.tsx"), "utf8");
+  const css = readFileSync(path.join(root, "app/globals.css"), "utf8");
+  assert.match(hero, /nextElementSibling\?\.scrollIntoView\(\{ behavior: "instant" \}\)/);
+  assert.match(css, /\.scroll-effects-ready \.intro-grid\[data-scroll-reveal\]\{transition-duration:\.5s\}/);
+});
+
 test("Aurora cycles four original presets while one scroll advances the page", () => {
   const listeners = {};
   const properties = new Map();
