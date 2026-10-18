@@ -2,6 +2,8 @@
 
 Este repositório contém a landing page, imagens e seis componentes animados. Compare a importação com a [versão publicada](https://prepara-asb-tsb.vercel.app/). **O repositório é privado:** o responsável pela importação precisa de acesso a ele ou receber o ZIP de alguém com acesso.
 
+**Estado em 18/10/2026:** landing page publicada e pacote de transferência pronto. A importação no Lovable e a troca do domínio original são etapas separadas.
+
 ## 1. Baixar e importar
 
 1. No [GitHub](https://github.com/luisroquette/prepara-asb-tsb-site), abra **Code → Download ZIP**. Também existe o [ZIP direto da `main`](https://github.com/luisroquette/prepara-asb-tsb-site/archive/refs/heads/main.zip). O arquivo já inclui este README, código e assets; `.env.local` e `node_modules` ficam de fora.
@@ -59,5 +61,5 @@ Abra <http://localhost:3000/>. `NEXT_PUBLIC_BASE_PATH` é opcional e serve apena
 
 - O preço mostrado é **R$ 179,90**, observado em 18/10/2026. Confira preço, parcelamento, garantia e acesso no checkout vigente antes de divulgar a versão migrada.
 - As capturas dos depoimentos vieram da página original. Confirme a autorização para reutilizá-las fora dela.
-- O hero contém um bundle compilado do template Aurora da Modulify. A licença de uso e redistribuição desse código **não está comprovada neste pacote**; confirme a licença ou obtenha exportação oficial antes de entregar/publicar outra cópia. Os demais efeitos têm origem e licença descritas nos arquivos `*_EXTRACTION.md`.
+- O hero contém um bundle compilado do template Aurora da Modulify. Em 18/10/2026, o responsável pelo projeto informou que **validou a redistribuição do efeito Aurora**. O documento dessa validação não foi anexado ao repositório. Os demais efeitos têm origem e licença descritas nos arquivos `*_EXTRACTION.md`.
 - `www.preparaasbtsb.com.br` não está conectado a este repositório. A referência usa `prepara-asb-tsb.vercel.app`. Só altere domínio e metadados de compartilhamento depois de decidir qual publicação será a oficial.

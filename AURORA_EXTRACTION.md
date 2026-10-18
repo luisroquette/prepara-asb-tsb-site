@@ -1,5 +1,7 @@
 # Aurora — mapa do código extraído no DevTools
 
+Em 18/10/2026, o responsável pelo projeto informou que validou a redistribuição do efeito Aurora. O comprovante dessa validação não está arquivado neste repositório.
+
 Inspeção da página pública `https://aurora-template.modulify.website/` em 18/10/2026, pelo Chrome DevTools Protocol (`Page.getResourceTree` e `Page.getResourceContent`). O servidor não expunha source maps. Os arquivos em `public/aurora/_next/static/` são os bundles publicados, com mudanças localizadas de caminhos e texto.
 
 | Trecho no bundle `0c3z-90flfp5o.js` | Código real encontrado |
