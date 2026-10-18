@@ -6,7 +6,7 @@ import re
 
 
 site = Path(__file__).resolve().parents[1]
-source = site.parent / "source" / "21st-product-timeline-preview.html"
+source = site / "source" / "21st-product-timeline-preview.html"
 target = site / "public" / "timeline" / "index.html"
 steps = json.loads((site / "app" / "method-steps.json").read_text())
 assert len(steps) == 6 and all(step["title"] and step["description"] for step in steps)

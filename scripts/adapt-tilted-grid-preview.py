@@ -5,7 +5,7 @@ import re
 
 
 site = Path(__file__).resolve().parents[1]
-original = (site.parent / "source" / "21st-tilted-grid-hero-preview.html").read_text()
+original = (site / "source" / "21st-tilted-grid-hero-preview.html").read_text()
 target = site / "public" / "closing" / "index.html"
 script = re.search(r'<script type="module" crossorigin>(.*?)</script>', original, re.S).group(1)
 stylesheet = re.search(r'<style rel="stylesheet" crossorigin>(.*?)</style>', original, re.S).group(1)

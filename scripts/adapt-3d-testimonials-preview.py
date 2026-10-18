@@ -6,7 +6,7 @@ import re
 
 
 site = Path(__file__).resolve().parents[1]
-source = site.parent / "source" / "21st-3d-testimonials-preview.html"
+source = site / "source" / "21st-3d-testimonials-preview.html"
 target = site / "public" / "3d-proof" / "index.html"
 original = source.read_text()
 script = re.search(r'<script type="module" crossorigin>(.*?)</script>', original, re.S).group(1)

@@ -5,7 +5,7 @@ import re
 
 
 site = Path(__file__).resolve().parents[1]
-source = site.parent / "source" / "21st-highlight-testimonial-preview.html"
+source = site / "source" / "21st-highlight-testimonial-preview.html"
 target = site / "public" / "proof" / "index.html"
 original = source.read_text()
 
