@@ -1,6 +1,7 @@
 const presets = ["Stream", "Cascade", "Veil", "Ember"];
 let playing = false;
 let lastWheel = -Infinity;
+let ready = false;
 
 if (window.parent === window) {
   document.documentElement.style.setProperty("--aurora-reveal", "1");
@@ -9,6 +10,17 @@ if (window.parent === window) {
 const style = document.createElement("style");
 style.textContent = 'div[class*="pointer-events-auto"][class*="bottom-6"]:has(> button[aria-pressed]){display:none!important}';
 document.head.append(style);
+
+function announceReady() {
+  if (!ready && document.querySelector(".aurora-canvas") && document.querySelector('button[aria-pressed]')) {
+    ready = true;
+    observer.disconnect();
+    window.parent.postMessage({ type: "prepara-aurora-ready" }, window.location.origin);
+  }
+}
+const observer = new MutationObserver(announceReady);
+observer.observe(document.documentElement, { childList: true, subtree: true });
+announceReady();
 
 function requestStep(direction) {
   window.parent.postMessage({ type: "prepara-aurora-step", direction }, window.location.origin);
@@ -50,7 +62,11 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("message", (event) => {
   if (event.origin !== window.location.origin || event.source !== window.parent) return;
-  if (event.data?.type !== "prepara-aurora-play" || playing) return;
+  if (event.data?.type === "prepara-aurora-ping") {
+    if (ready) window.parent.postMessage({ type: "prepara-aurora-ready" }, window.location.origin);
+    return;
+  }
+  if (event.data?.type !== "prepara-aurora-play" || playing || !ready) return;
   playing = true;
   document.documentElement.style.setProperty("--aurora-reveal", "1");
   presets.slice(1).forEach((preset, index) => {

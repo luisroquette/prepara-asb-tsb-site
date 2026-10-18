@@ -25,7 +25,8 @@ h2 em{font-style:normal;color:var(--violet)}
 .header-cta:hover{background:var(--ink);color:white}
 .hero{position:relative;height:max(100svh,640px);overflow:hidden}
 .hero:focus-visible{outline:3px solid var(--violet);outline-offset:-3px}
-.hero-frame{display:block;border:0;width:100%;height:100%;background:white}
+.hero-frame{display:block;border:0;width:100%;height:100%;background:white;pointer-events:none}
+.hero-frame.ready{pointer-events:auto}
 .hero-scroll{position:absolute;bottom:33px;right:4.3%;z-index:2;font-size:10px;font-weight:700;letter-spacing:.14em;color:#665d70;pointer-events:none}
 .hero-scroll span{font-size:17px;vertical-align:middle;margin-left:8px}
 .intro{padding-top:136px;padding-bottom:72px}
