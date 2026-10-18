@@ -1,4 +1,6 @@
 const presets = ["Stream", "Cascade", "Veil", "Ember"];
+let playing = false;
+let lastWheel = -Infinity;
 
 if (window.parent === window) {
   document.documentElement.style.setProperty("--aurora-reveal", "1");
@@ -15,7 +17,9 @@ function requestStep(direction) {
 window.addEventListener("wheel", (event) => {
   if (window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   event.preventDefault();
-  if (Math.abs(event.deltaY) > 1) requestStep(Math.sign(event.deltaY));
+  const now = performance.now();
+  if (Math.abs(event.deltaY) > 1 && now - lastWheel > 450) requestStep(Math.sign(event.deltaY));
+  lastWheel = now;
 }, { passive: false });
 
 let touchStart = null;
@@ -36,7 +40,7 @@ window.addEventListener("touchmove", (event) => {
 
 window.addEventListener("keydown", (event) => {
   if (window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  if (event.target?.closest?.("button,a,input,textarea,select,[contenteditable]")) return;
+  if (event.repeat || event.target?.closest?.("button,a,input,textarea,select,[contenteditable]")) return;
   const direction = event.key === "PageDown" || event.key === "ArrowDown" || (event.key === " " && !event.shiftKey) ? 1
     : event.key === "PageUp" || event.key === "ArrowUp" || (event.key === " " && event.shiftKey) ? -1 : 0;
   if (!direction) return;
@@ -46,14 +50,18 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("message", (event) => {
   if (event.origin !== window.location.origin || event.source !== window.parent) return;
-  if (event.data?.type !== "prepara-aurora-scroll") return;
-  const { preset, reveal } = event.data;
-  if (!presets.includes(preset) || typeof reveal !== "number" || !Number.isFinite(reveal)) return;
-  document.documentElement.style.setProperty("--aurora-reveal", String(Math.max(0, Math.min(1, reveal))));
-  const button = Array.from(document.querySelectorAll('button[aria-pressed]')).find(
-    (item) => item.textContent.trim() === preset,
-  );
-  if (button && button.getAttribute("aria-pressed") !== "true") button.click();
+  if (event.data?.type !== "prepara-aurora-play" || playing) return;
+  playing = true;
+  document.documentElement.style.setProperty("--aurora-reveal", "1");
+  presets.slice(1).forEach((preset, index) => {
+    setTimeout(() => {
+      const button = Array.from(document.querySelectorAll('button[aria-pressed]')).find(
+        (item) => item.textContent.trim() === preset,
+      );
+      if (button && button.getAttribute("aria-pressed") !== "true") button.click();
+    }, (index + 1) * 850);
+  });
+  setTimeout(() => window.parent.postMessage({ type: "prepara-aurora-complete" }, window.location.origin), 3600);
 });
 
 document.addEventListener("click", (event) => {

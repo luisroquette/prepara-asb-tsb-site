@@ -7,12 +7,14 @@ import test from "node:test";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
-test("Aurora follows trusted scroll messages through all four presets", () => {
+test("Aurora plays four original presets from one trusted scroll gesture", () => {
   const listeners = {};
   const properties = new Map();
-  const steps = [];
-  const parent = { postMessage: (message) => { steps.push(message); } };
+  const messages = [];
+  const timers = [];
+  const parent = { postMessage: (message) => { messages.push(message); } };
   let selected = "Stream";
+  let now = 0;
   const buttons = ["Stream", "Cascade", "Veil", "Ember"].map((name) => ({
     textContent: name,
     getAttribute: () => String(selected === name),
@@ -31,28 +33,36 @@ test("Aurora follows trusted scroll messages through all four presets", () => {
     addEventListener: () => {},
     querySelectorAll: () => buttons,
   };
-  runInNewContext(readFileSync(path.join(root, "public/aurora/adapter.js"), "utf8"), { window, document });
+  runInNewContext(readFileSync(path.join(root, "public/aurora/adapter.js"), "utf8"), {
+    window, document, performance: { now: () => now },
+    setTimeout: (callback, delay) => timers.push({ callback, delay }),
+  });
 
-  for (const [preset, reveal] of [["Stream", 0], ["Cascade", 0.5], ["Veil", 1], ["Ember", 1]]) {
-    listeners.message({ origin: window.location.origin, source: parent, data: { type: "prepara-aurora-scroll", preset, reveal } });
+  const play = (origin = window.location.origin) => listeners.message({ origin, source: parent, data: { type: "prepara-aurora-play" } });
+  play("https://other.test");
+  assert.equal(properties.has("--aurora-reveal"), false);
+  play();
+  play();
+  assert.equal(properties.get("--aurora-reveal"), "1");
+  assert.deepEqual(timers.map(({ delay }) => delay), [850, 1700, 2550, 3600]);
+  for (const [delay, preset] of [[850, "Cascade"], [1700, "Veil"], [2550, "Ember"]]) {
+    timers.find((timer) => timer.delay === delay).callback();
     assert.equal(selected, preset);
-    assert.equal(properties.get("--aurora-reveal"), String(reveal));
   }
-  listeners.message({ origin: "https://other.test", source: parent, data: { type: "prepara-aurora-scroll", preset: "Stream", reveal: 0 } });
-  assert.equal(selected, "Ember");
-  listeners.message({ origin: window.location.origin, source: parent, data: { type: "prepara-aurora-scroll", preset: "Dusk", reveal: 0 } });
-  assert.equal(selected, "Ember");
+  timers.find((timer) => timer.delay === 3600).callback();
+  assert.equal(messages.at(-1).type, "prepara-aurora-complete");
 
   let prevented = false;
   listeners.wheel({ deltaY: 3500, preventDefault: () => { prevented = true; } });
+  now = 100;
+  listeners.wheel({ deltaY: 3500, preventDefault: () => {} });
   assert.equal(prevented, true);
-  assert.equal(steps.at(-1).type, "prepara-aurora-step");
-  assert.equal(steps.at(-1).direction, 1);
+  assert.equal(messages.filter((message) => message.type === "prepara-aurora-step").length, 1);
+  now = 600;
+  listeners.wheel({ deltaY: 3500, preventDefault: () => {} });
+  assert.equal(messages.filter((message) => message.type === "prepara-aurora-step").length, 2);
   listeners.touchstart({ touches: [{ clientY: 200 }] });
   listeners.touchmove({ touches: [{ clientY: 130 }], preventDefault: () => {} });
-  assert.equal(steps.at(-1).type, "prepara-aurora-step");
-  assert.equal(steps.at(-1).direction, 1);
-  assert.equal(steps.length, 2);
   listeners.touchmove({ touches: [{ clientY: 80 }], preventDefault: () => {} });
-  assert.equal(steps.length, 2);
+  assert.equal(messages.filter((message) => message.type === "prepara-aurora-step").length, 3);
 });
