@@ -1,9 +1,60 @@
 const presets = ["Stream", "Cascade", "Veil", "Ember"];
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+if (window.parent === window) {
+  document.documentElement.style.setProperty("--aurora-reveal", "1");
+}
 
 const style = document.createElement("style");
 style.textContent = 'div[class*="pointer-events-auto"][class*="bottom-6"]:has(> button[aria-pressed]){display:none!important}';
 document.head.append(style);
+
+function requestStep(direction) {
+  window.parent.postMessage({ type: "prepara-aurora-step", direction }, window.location.origin);
+}
+
+window.addEventListener("wheel", (event) => {
+  if (window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  event.preventDefault();
+  if (Math.abs(event.deltaY) > 1) requestStep(Math.sign(event.deltaY));
+}, { passive: false });
+
+let touchStart = null;
+let touchSent = false;
+window.addEventListener("touchstart", (event) => {
+  touchStart = event.touches[0]?.clientY ?? null;
+  touchSent = false;
+}, { passive: true });
+window.addEventListener("touchmove", (event) => {
+  if (touchStart === null || window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  event.preventDefault();
+  const distance = touchStart - (event.touches[0]?.clientY ?? touchStart);
+  if (!touchSent && Math.abs(distance) > 40) {
+    touchSent = true;
+    requestStep(Math.sign(distance));
+  }
+}, { passive: false });
+
+window.addEventListener("keydown", (event) => {
+  if (window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (event.target?.closest?.("button,a,input,textarea,select,[contenteditable]")) return;
+  const direction = event.key === "PageDown" || event.key === "ArrowDown" || (event.key === " " && !event.shiftKey) ? 1
+    : event.key === "PageUp" || event.key === "ArrowUp" || (event.key === " " && event.shiftKey) ? -1 : 0;
+  if (!direction) return;
+  event.preventDefault();
+  requestStep(direction);
+});
+
+window.addEventListener("message", (event) => {
+  if (event.origin !== window.location.origin || event.source !== window.parent) return;
+  if (event.data?.type !== "prepara-aurora-scroll") return;
+  const { preset, reveal } = event.data;
+  if (!presets.includes(preset) || typeof reveal !== "number" || !Number.isFinite(reveal)) return;
+  document.documentElement.style.setProperty("--aurora-reveal", String(Math.max(0, Math.min(1, reveal))));
+  const button = Array.from(document.querySelectorAll('button[aria-pressed]')).find(
+    (item) => item.textContent.trim() === preset,
+  );
+  if (button && button.getAttribute("aria-pressed") !== "true") button.click();
+});
 
 document.addEventListener("click", (event) => {
   const button = event.target.closest("button");
@@ -17,15 +68,3 @@ document.addEventListener("click", (event) => {
     );
   }
 });
-
-if (!reducedMotion.matches) {
-  window.setInterval(() => {
-    if (document.visibilityState !== "visible") return;
-    const buttons = Array.from(document.querySelectorAll('button[aria-pressed]')).filter((button) =>
-      presets.includes(button.textContent.trim()),
-    );
-    if (buttons.length !== presets.length) return;
-    const current = buttons.findIndex((button) => button.getAttribute("aria-pressed") === "true");
-    buttons[(current + 1) % buttons.length].click();
-  }, 8000);
-}

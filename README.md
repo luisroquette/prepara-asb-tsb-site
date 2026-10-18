@@ -21,7 +21,7 @@ Objetivo: fazer todas as seções, arquivos locais e interações funcionarem. A
 
 Rotas internas que devem responder HTTP 200 e carregar na página: /, /aurora/, /timeline/, /folders/, /proof/, /3d-proof/ e /closing/. Preserve a barra final nas seis rotas embutidas: /aurora/index.html e equivalentes deram 404 em um deploy anterior. Preserve também os caminhos relativos de JS, CSS, fontes e imagens em cada iframe.
 
-Hero: alterne Stream, Cascade, Veil e Ember automaticamente a cada 8 segundos, sem controles de escolha visíveis. Os botões Conhecer o curso e Ver resultados devem enviar mensagens para a página principal e rolar até #curso e #resultados. Respeite prefers-reduced-motion.
+Hero: mantenha o iframe Aurora fixo em uma área própria de rolagem com cinco paradas obrigatórias, inclusive para gestos rápidos de mouse e toque. A primeira revela Stream progressivamente; as próximas apresentam Cascade, Veil e Ember, nessa ordem, antes de liberar a seção seguinte. Não use timer nem controles de escolha visíveis. Os botões Conhecer o curso e Ver resultados devem enviar mensagens para a página principal e rolar até #curso e #resultados. Respeite prefers-reduced-motion, exibindo um hero estático sem trechos extras.
 
 Método: seis passos, animação vinculada ao scroll e conteúdo alternativo acessível. Curso: pastas interativas e Works Wheel com seis frentes do único curso. Resultados: cartões animados e capturas reais com nomes corretos e links para ampliar. Professor: use a foto de Diego Thiers. Preserve FAQ, matrícula, fechamento, redes sociais e encaixe de scroll.
 
