@@ -1,81 +1,9 @@
 const presets = ["Stream", "Cascade", "Veil", "Ember"];
-let lastWheel = -Infinity;
-let ready = false;
-
-if (window.parent === window) {
-  document.documentElement.style.setProperty("--aurora-reveal", "1");
-}
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const style = document.createElement("style");
 style.textContent = 'div[class*="pointer-events-auto"][class*="bottom-6"]:has(> button[aria-pressed]){display:none!important}';
 document.head.append(style);
-
-function announceReady() {
-  if (!ready && document.querySelector(".aurora-canvas") && document.querySelector('button[aria-pressed]')) {
-    ready = true;
-    observer.disconnect();
-    window.parent.postMessage({ type: "prepara-aurora-ready" }, window.location.origin);
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      let next = 1;
-      setInterval(() => {
-        const preset = presets[next];
-        const button = Array.from(document.querySelectorAll('button[aria-pressed]')).find(
-          (item) => item.textContent.trim() === preset,
-        );
-        if (button && button.getAttribute("aria-pressed") !== "true") button.click();
-        next = (next + 1) % presets.length;
-      }, 2500);
-    }
-  }
-}
-const observer = new MutationObserver(announceReady);
-observer.observe(document.documentElement, { childList: true, subtree: true });
-announceReady();
-
-function requestStep(direction) {
-  window.parent.postMessage({ type: "prepara-aurora-step", direction }, window.location.origin);
-}
-
-window.addEventListener("wheel", (event) => {
-  if (window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  event.preventDefault();
-  const now = performance.now();
-  if (Math.abs(event.deltaY) > 1 && now - lastWheel > 450) requestStep(Math.sign(event.deltaY));
-  lastWheel = now;
-}, { passive: false });
-
-let touchStart = null;
-let touchSent = false;
-window.addEventListener("touchstart", (event) => {
-  touchStart = event.touches[0]?.clientY ?? null;
-  touchSent = false;
-}, { passive: true });
-window.addEventListener("touchmove", (event) => {
-  if (touchStart === null || window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  event.preventDefault();
-  const distance = touchStart - (event.touches[0]?.clientY ?? touchStart);
-  if (!touchSent && Math.abs(distance) > 40) {
-    touchSent = true;
-    requestStep(Math.sign(distance));
-  }
-}, { passive: false });
-
-window.addEventListener("keydown", (event) => {
-  if (window.parent === window || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  if (event.repeat || event.target?.closest?.("button,a,input,textarea,select,[contenteditable]")) return;
-  const direction = event.key === "PageDown" || event.key === "ArrowDown" || (event.key === " " && !event.shiftKey) ? 1
-    : event.key === "PageUp" || event.key === "ArrowUp" || (event.key === " " && event.shiftKey) ? -1 : 0;
-  if (!direction) return;
-  event.preventDefault();
-  requestStep(direction);
-});
-
-window.addEventListener("message", (event) => {
-  if (event.origin !== window.location.origin || event.source !== window.parent) return;
-  if (event.data?.type === "prepara-aurora-ping") {
-    if (ready) window.parent.postMessage({ type: "prepara-aurora-ready" }, window.location.origin);
-  }
-});
 
 document.addEventListener("click", (event) => {
   const button = event.target.closest("button");
@@ -89,3 +17,15 @@ document.addEventListener("click", (event) => {
     );
   }
 });
+
+if (!reducedMotion.matches) {
+  window.setInterval(() => {
+    if (document.visibilityState !== "visible" || (window.parent !== window && window.frameElement?.getBoundingClientRect().bottom <= 0)) return;
+    const buttons = Array.from(document.querySelectorAll('button[aria-pressed]')).filter((button) =>
+      presets.includes(button.textContent.trim()),
+    );
+    if (buttons.length !== presets.length) return;
+    const current = buttons.findIndex((button) => button.getAttribute("aria-pressed") === "true");
+    buttons[(current + 1) % buttons.length].click();
+  }, 8000);
+}
