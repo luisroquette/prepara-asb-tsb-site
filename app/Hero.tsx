@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
@@ -8,9 +8,12 @@ export default function Hero() {
   const section = useRef<HTMLElement>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const frameLoad = useRef<() => void>(() => {});
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let phase: "idle" | "playing" | "done" = "idle";
+    let frameReady = false;
+    let completionTimer: ReturnType<typeof setTimeout> | undefined;
     let exitQueued = false;
     let lastWheel = -Infinity;
     let touchStart: number | null = null;
@@ -24,35 +27,44 @@ export default function Hero() {
       if (phase === "idle") {
         phase = "playing";
         frame.current?.contentWindow?.postMessage({ type: "prepara-aurora-play" }, window.location.origin);
+        completionTimer = setTimeout(complete, 3600);
       } else if (phase === "playing") {
         exitQueued = true;
       } else {
         section.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
       }
     };
+    const complete = () => {
+      if (phase !== "playing") return;
+      phase = "done";
+      if (exitQueued) enter();
+    };
     frameLoad.current = () => {
-      if (phase === "playing") frame.current?.contentWindow?.postMessage({ type: "prepara-aurora-play" }, window.location.origin);
+      frame.current?.contentWindow?.postMessage({ type: "prepara-aurora-ping" }, window.location.origin);
     };
     function onMessage(event: MessageEvent) {
       if (event.origin !== window.location.origin || event.source !== frame.current?.contentWindow) return;
-      if (event.data?.type === "prepara-aurora-complete") {
-        phase = "done";
-        if (exitQueued) enter();
+      if (event.data?.type === "prepara-aurora-ready") {
+        frameReady = true;
+        setReady(true);
+      } else if (event.data?.type === "prepara-aurora-complete") {
+        complete();
       } else if (event.data?.type === "prepara-aurora-step" && event.data.direction === 1 && active() && !reducedMotion()) {
-        enter();
+        if (frameReady) enter();
+        else section.current?.nextElementSibling?.scrollIntoView({ behavior: "smooth" });
       } else if (event.data?.type === "prepara-aurora-cta" && (event.data.target === "curso" || event.data.target === "resultados")) {
         document.getElementById(event.data.target)?.scrollIntoView({ behavior: "smooth" });
       }
     }
     const onWheel = (event: WheelEvent) => {
-      if (!active() || reducedMotion() || !event.deltaY) return;
+      if (!frameReady || !active() || reducedMotion() || !event.deltaY) return;
       event.preventDefault();
       const now = performance.now();
       if (event.deltaY > 0 && now - lastWheel > 450) enter();
       lastWheel = now;
     };
     const onKeyDown = (event: KeyboardEvent) => {
-      if (!active() || reducedMotion() || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (!frameReady || !active() || reducedMotion() || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
       if (event.target instanceof HTMLElement && event.target.closest("a,button,input,textarea,select,[contenteditable]")) return;
       if (event.key !== "PageDown" && event.key !== "ArrowDown" && event.key !== " ") return;
       event.preventDefault();
@@ -63,7 +75,7 @@ export default function Hero() {
       touchSent = false;
     };
     const onTouchMove = (event: TouchEvent) => {
-      if (!active() || reducedMotion() || touchStart === null) return;
+      if (!frameReady || !active() || reducedMotion() || touchStart === null) return;
       event.preventDefault();
       if (!touchSent && touchStart - (event.touches[0]?.clientY ?? touchStart) > 40) {
         touchSent = true;
@@ -75,7 +87,9 @@ export default function Hero() {
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
+    frameLoad.current();
     return () => {
+      clearTimeout(completionTimer);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("message", onMessage);
       window.removeEventListener("keydown", onKeyDown);
@@ -93,7 +107,7 @@ export default function Hero() {
         onLoad={() => frameLoad.current()}
         src={`${basePath}/aurora/`}
         title="Sua vaga em saúde bucal começa com um plano. Animação Aurora com quatro estilos ativados pela rolagem."
-        className="hero-frame"
+        className={`hero-frame${ready ? " ready" : ""}`}
         loading="eager"
       />
       <p className="hero-scroll">ROLE PARA VER · ROLE DE NOVO PARA SEGUIR <span aria-hidden="true">↓</span></p>

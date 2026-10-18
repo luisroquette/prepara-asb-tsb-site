@@ -15,6 +15,8 @@ test("Aurora plays four original presets from one trusted scroll gesture", () =>
   const parent = { postMessage: (message) => { messages.push(message); } };
   let selected = "Stream";
   let now = 0;
+  let mounted = false;
+  let onMutation;
   const buttons = ["Stream", "Cascade", "Veil", "Ember"].map((name) => ({
     textContent: name,
     getAttribute: () => String(selected === name),
@@ -31,14 +33,29 @@ test("Aurora plays four original presets from one trusted scroll gesture", () =>
     createElement: () => ({}),
     head: { append: () => {} },
     addEventListener: () => {},
+    querySelector: () => mounted ? {} : null,
     querySelectorAll: () => buttons,
   };
   runInNewContext(readFileSync(path.join(root, "public/aurora/adapter.js"), "utf8"), {
     window, document, performance: { now: () => now },
     setTimeout: (callback, delay) => timers.push({ callback, delay }),
+    MutationObserver: class {
+      constructor(callback) { onMutation = callback; }
+      observe() {}
+      disconnect() {}
+    },
   });
 
   const play = (origin = window.location.origin) => listeners.message({ origin, source: parent, data: { type: "prepara-aurora-play" } });
+  listeners.message({ origin: window.location.origin, source: parent, data: { type: "prepara-aurora-ping" } });
+  play();
+  assert.equal(messages.length, 0);
+  assert.equal(timers.length, 0);
+  mounted = true;
+  onMutation();
+  assert.equal(messages.at(-1).type, "prepara-aurora-ready");
+  listeners.message({ origin: window.location.origin, source: parent, data: { type: "prepara-aurora-ping" } });
+  assert.equal(messages.at(-1).type, "prepara-aurora-ready");
   play("https://other.test");
   assert.equal(properties.has("--aurora-reveal"), false);
   play();
