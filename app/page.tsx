@@ -85,7 +85,7 @@ export default function Home() {
               <p>Conteúdo feito para concursos de Auxiliar e Técnico em Saúde Bucal. Da primeira aula até a revisão antes da prova.</p>
             </div>
             <div className="course-board">
-              <iframe src={`${basePath}/folders/index.html`} title="Pastas interativas com aulas, prática e materiais do curso" loading="lazy" className="folder-frame" />
+              <iframe src={`${basePath}/folders/`} title="Pastas interativas com aulas, prática e materiais do curso" loading="lazy" className="folder-frame" />
             </div>
           </div>
         </section>
@@ -115,9 +115,9 @@ export default function Home() {
         <section className="results" id="resultados" aria-labelledby="results-title">
           <div className="section-shell">
             <div className="results-heading" data-scroll-reveal><div className="section-kicker"><span className="dot" /> VOZES REAIS</div><h2 id="results-title">A melhor prova de um curso está <em>em quem estudou com ele.</em></h2><p>Leia o relato e confira a mensagem original. Os resultados abaixo foram apresentados pelos alunos na página do Prepara.</p></div>
-            <div className="results-feature"><iframe src={`${basePath}/proof/index.html`} title="Depoimentos animados com capturas originais de três alunos" loading="lazy" className="proof-frame" /></div>
+            <div className="results-feature"><iframe src={`${basePath}/proof/`} title="Depoimentos animados com capturas originais de três alunos" loading="lazy" className="proof-frame" /></div>
             <div className="proof-archive-heading"><h3>As mensagens, na íntegra.</h3><p>Abra cada captura para ler o conteúdo no tamanho original.</p></div>
-            <div className="proof-3d"><iframe src={`${basePath}/3d-proof/index.html`} title="Depoimentos reais em cartões com movimento tridimensional" loading="lazy" className="proof-3d-frame" /></div>
+            <div className="proof-3d"><iframe src={`${basePath}/3d-proof/`} title="Depoimentos reais em cartões com movimento tridimensional" loading="lazy" className="proof-3d-frame" /></div>
             <div className="proof-captures" aria-label="Capturas originais dos depoimentos">
               {stories.map((story) => <figure key={story.name}>
                 <a href={image(story.shot)} target="_blank" rel="noopener noreferrer" aria-label={`Abrir captura original do depoimento de ${story.name}`}><Image src={image(story.shot)} alt={`Captura do depoimento de ${story.name}`} width={story.width} height={story.height} /></a>
@@ -157,7 +157,7 @@ export default function Home() {
 
         <section className="closing section-shell" id="encerramento" aria-labelledby="closing-title">
           <div className="closing-stage">
-            <iframe src={`${basePath}/closing/index.html`} title="Capas do Prepara em uma faixa curva animada" loading="lazy" aria-hidden="true" tabIndex={-1} className="closing-motion" />
+            <iframe src={`${basePath}/closing/`} title="Capas do Prepara em uma faixa curva animada" loading="lazy" aria-hidden="true" tabIndex={-1} className="closing-motion" />
             <div className="closing-content" data-scroll-reveal>
               <div><div className="section-kicker"><span className="dot" /> ANTES DA PRÓXIMA PROVA</div><h2 id="closing-title">Transforme o próximo estudo <em>em um passo real.</em></h2></div>
               <div className="closing-action"><p>Aulas, prática e revisão no mesmo caminho para concursos de ASB e TSB.</p><a href={checkout} target="_blank" rel="noopener noreferrer">Começar com o Prepara <span aria-hidden="true">↗</span></a><small>Compra e acesso pela Hotmart.</small></div>

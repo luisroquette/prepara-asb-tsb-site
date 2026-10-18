@@ -24,7 +24,7 @@ export default function Hero() {
       <h1 className="sr-only">Sua vaga em saúde bucal começa com um plano.</h1>
       <iframe
         ref={frame}
-        src={`${basePath}/aurora/index.html`}
+        src={`${basePath}/aurora/`}
         title="Sua vaga em saúde bucal começa com um plano. Animação Aurora com quatro estilos alternados automaticamente."
         className="hero-frame"
         loading="eager"

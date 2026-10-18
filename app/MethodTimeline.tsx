@@ -44,7 +44,7 @@ export default function MethodTimeline() {
 
   return (
     <section className="method-timeline" ref={section} aria-label="Seis etapas do método Prepara ASB/TSB">
-      <iframe ref={frame} onLoad={onFrameLoad} src={`${basePath}/timeline/index.html`} title="Linha do tempo interativa com as seis etapas do curso" loading="lazy" className="method-timeline-frame" tabIndex={-1} />
+      <iframe ref={frame} onLoad={onFrameLoad} src={`${basePath}/timeline/`} title="Linha do tempo interativa com as seis etapas do curso" loading="lazy" className="method-timeline-frame" tabIndex={-1} />
       <ol className="method-timeline-static">
         {steps.map((step, index) => <li key={step.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}
       </ol>
