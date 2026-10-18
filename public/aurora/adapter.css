@@ -1,6 +1,6 @@
 /* The four requested presets retain Aurora's original shader and controls. */
 :root {
-  --aurora-reveal: .3;
+  --aurora-reveal: 1;
 }
 
 .aurora-canvas {
