@@ -1,13 +1,4 @@
 /* The four requested presets retain Aurora's original shader and controls. */
-:root {
-  --aurora-reveal: 1;
-}
-
-.aurora-canvas {
-  opacity: var(--aurora-reveal) !important;
-  transition: opacity .65s ease !important;
-}
-
 section > .pointer-events-auto.absolute.bottom-6 > button:nth-child(n + 5) {
   display: none;
 }
