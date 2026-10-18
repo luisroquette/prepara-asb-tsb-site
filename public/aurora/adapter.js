@@ -20,7 +20,7 @@ document.addEventListener("click", (event) => {
 
 if (!reducedMotion.matches) {
   window.setInterval(() => {
-    if (document.visibilityState !== "visible") return;
+    if (document.visibilityState !== "visible" || (window.parent !== window && window.frameElement?.getBoundingClientRect().bottom <= 0)) return;
     const buttons = Array.from(document.querySelectorAll('button[aria-pressed]')).filter((button) =>
       presets.includes(button.textContent.trim()),
     );

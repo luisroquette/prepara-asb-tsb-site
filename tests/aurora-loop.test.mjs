@@ -13,6 +13,7 @@ test("Aurora loops automatically without capturing scroll, touch or keyboard", (
   const timers = [];
   const parent = { postMessage: (message) => messages.push(message) };
   let selected = "Stream";
+  let frameBottom = 800;
   const buttons = ["Stream", "Cascade", "Veil", "Ember"].map((name) => ({
     textContent: name,
     getAttribute: () => String(selected === name),
@@ -20,6 +21,7 @@ test("Aurora loops automatically without capturing scroll, touch or keyboard", (
   }));
   const window = {
     parent,
+    frameElement: { getBoundingClientRect: () => ({ bottom: frameBottom }) },
     location: { origin: "https://prepara.test" },
     matchMedia: () => ({ matches: false }),
     setInterval: (callback, delay) => timers.push({ callback, delay }),
@@ -42,6 +44,9 @@ test("Aurora loops automatically without capturing scroll, touch or keyboard", (
     timers[0].callback();
     assert.equal(selected, preset);
   }
+  frameBottom = 0;
+  timers[0].callback();
+  assert.equal(selected, "Stream");
   listeners.click({ target: { closest: () => ({ textContent: "Conhecer o curso" }) } });
   assert.equal(messages.length, 1);
   assert.equal(messages[0].type, "prepara-aurora-cta");
